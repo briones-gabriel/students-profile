@@ -5,7 +5,7 @@ import Student from "./Student";
 const StudentsList: FC<ListOfStudents> = ({ students }) => {
 	return (
 		<div className="students-list">
-			{students.map((student) => (
+			{students.map(student => (
 				<Student
 					key={student.id}
 					id={student.id}
