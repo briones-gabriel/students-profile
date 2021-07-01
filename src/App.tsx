@@ -22,6 +22,7 @@ const App: FC = () => {
 			});
 	}, [])
 
+	//TODO: Add a "No results" screen
 	return (
 		<div className="App">
 			<div>

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { StudentProfile } from "../global";
 import ProfilePicture from "./ProfilePicture";
 
@@ -13,17 +13,31 @@ const getAverage = (list: Array<string>): number => {
 }
 
 const Student: FC<StudentProfile> = ({ id, city, company, email, firstName, lastName, grades, pic, skill }) => {
+	const [showTests, setShowTests] = useState(false);
+
 	return (
 		<div key={id} className="student-profile">
 			<ProfilePicture url={pic} alt={firstName + " " + lastName}/>
 			<div style={{ flex: 1 }}>
-				<h1 className="profile-name">{firstName + " " + lastName}</h1>
+				<div className="profile-header">
+					<h1 className="profile-name">{firstName + " " + lastName}</h1>
+					<button className="btn" onClick={() => setShowTests(!showTests)}>
+						{ showTests ? "▵" : "▿"}
+					</button>
+				</div>
 				<ul className="profile-details">
 					<li>Email: {email}</li>
 					<li>Company: {company}</li>
 					<li>City: {city}</li>
 					<li>Skill: {skill}</li>
-					<li>Average: {getAverage(grades)}</li>
+					<li>Average: {getAverage(grades)}%</li>
+					{ showTests && (
+						<div style={{ marginTop: "1rem" }}>
+						{grades.map((grade, index) => (
+							<li key={index}>Test {index + 1}: {grade}%</li>
+						))}
+						</div>
+					)}
 				</ul>
 			</div>
 		</div>

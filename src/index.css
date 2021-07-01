@@ -38,9 +38,26 @@ body {
 	width: 8rem;
 }
 
+.btn {
+	background-color: transparent;
+	cursor: pointer;
+	font-size: 2rem;
+	margin-right: 0.5rem;
+	padding: 0px 8px;
+	border: 0px;
+}
+
+.profile-header {
+	box-sizing: border-box;
+	padding-top: 1rem;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
 .profile-name {
 	text-transform: uppercase;
-	margin-bottom: 0px;
+	margin: 0px;
 }
 
 .profile-details {
