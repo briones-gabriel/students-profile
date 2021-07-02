@@ -1,5 +1,6 @@
-export type StudentProfile = {
-	id: number,
+export interface StudentProfile extends Record<string, string | Array<string> | Function> {
+	id: string,
+	fullName: string,
 	city: string,
 	company: string,
 	email: string,
@@ -7,16 +8,24 @@ export type StudentProfile = {
 	lastName: string,
 	grades: Array<string>,
 	pic: string,
-	skill: string
+	skill: string,
+	tags: Array<string>,
+	addTagToStudent: (tag: string, studentId: string) => void,
+	removeTagFromStudent: (i: number, studentId: string) => void,
 };
 
-export type ListOfStudents = {
-	students: Array<StudentProfile>
+export interface ListOfStudents {
+	students: Array<StudentProfile>,
+	addTagToStudent: (tag: string, studentId: string) => void,
+	removeTagFromStudent: (i: number, studentId: string) => void,
 }
 
-export type Searchable = {
-	data: Array<Record<any, any>>,
-	setData: (data: Array<any>) => void,
-	searchParams: Array<string>,
+export interface Searchable {
+	APIdata: Array<StudentProfile>,
+	data: Array<StudentProfile>,
+	setData: (students: Array<StudentProfile>) => any,
+	setFilters: any,
+	filters: any,
+	searchParam: string,
 	placeholder: string
 }

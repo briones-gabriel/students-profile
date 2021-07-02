@@ -12,17 +12,31 @@ const getAverage = (list: Array<string>): number => {
 	return list.reduce((a, b) => Number(a) + Number(b), 0) / list.length;
 }
 
-const Student: FC<StudentProfile> = ({ id, city, company, email, firstName, lastName, grades, pic, skill }) => {
+const Student: FC<StudentProfile> = ({ id, fullName, city, company, email, grades, pic, skill, tags, addTagToStudent, removeTagFromStudent }) => {
 	const [showTests, setShowTests] = useState(false);
+	const [input, setInput] = useState("");
+
+	/**
+	 * Handles what happens when the user presses a key on the tags input field.
+	 *
+	 * @param {any} e - The event handler.
+	 */
+	const handleOnKeyDown = (e: any) => {
+		const tag: string = input;
+		if (e.keyCode === 13 && tag) {
+			addTagToStudent(tag, id);
+			setInput("");
+		}
+	}
 
 	return (
 		<div key={id} className="student-profile">
-			<ProfilePicture url={pic} alt={firstName + " " + lastName}/>
+			<ProfilePicture url={pic} alt={fullName} />
 			<div style={{ flex: 1 }}>
 				<div className="profile-header">
-					<h1 className="profile-name">{firstName + " " + lastName}</h1>
+					<h1 className="profile-name">{fullName}</h1>
 					<button className="btn" onClick={() => setShowTests(!showTests)}>
-						{ showTests ? "▵" : "▿"}
+						{showTests ? "−" : "+"}
 					</button>
 				</div>
 				<ul className="profile-details">
@@ -31,13 +45,27 @@ const Student: FC<StudentProfile> = ({ id, city, company, email, firstName, last
 					<li>City: {city}</li>
 					<li>Skill: {skill}</li>
 					<li>Average: {getAverage(grades)}%</li>
-					{ showTests && (
+					{showTests && (
 						<div style={{ marginTop: "1rem" }}>
-						{grades.map((grade, index) => (
-							<li key={index}>Test {index + 1}: {grade}%</li>
-						))}
+							{grades.map((grade, index) => <li key={index}>Test {index + 1}: {grade}%</li>)}
 						</div>
 					)}
+					{tags && (
+						<ul className="tag-container">
+							{tags.map((tag, i) => (
+								<li key={i} className="tag" onClick={() => removeTagFromStudent(i, id)}>
+									<p>{tag}</p>
+								</li>
+							))}
+						</ul>
+					)}
+					<input
+						value={input}
+						onInput={e => setInput(e.currentTarget.value)}
+						onKeyDown={handleOnKeyDown}
+						placeholder="Add a tag"
+						className="tag-bar"
+					/>
 				</ul>
 			</div>
 		</div>
