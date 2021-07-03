@@ -1,43 +1,20 @@
 import { useEffect, useState, FC } from 'react';
-import { StudentProfile, ListOfStudents } from "./global";
+import { StudentProfile, Data } from "./global";
 import StudentsList from "./components/StudentsList";
 import SearchBar from "./components/SearchBar";
 
 const App: FC = () => {
-	const [APIstudents, setAPIStudents] = useState<Array<StudentProfile>>([]);
-	const [students, setStudents] = useState<Array<StudentProfile>>([]);
+	const [APIStudents, setAPIStudents] = useState<Array<StudentProfile>>([]);
 	const [filters, setFilters] = useState<Map<string, string>>(new Map());
 
-	useEffect(() => {
-		updateFilters();
-	}, [filters])
-
-	const updateFilters = () => {
-				setStudents(APIstudents.filter((student: StudentProfile) => {
-			let result = true;
-
-			filters.forEach((_e, i) => {
-				const toFilter = Array.isArray(student[i]) ? (student[i] as string[]).join() : student[i] as string;
-				if (!toFilter.toLowerCase().includes((filters.get(i) as string).toLowerCase())) result = false;
-			});
-
-			return result;
-		}));
-	}
-
 	/**
-	 * Adds a tag to a student.
+	 * Adds a given tag to a given student by updating the APIStudents array.
 	 *
 	 * @param {string} tag - The string with the tag to add.
 	 * @param {string} studentId - The id of the student from which to delete the tag.
 	 */
 	const addTagToStudent = (tag: string, studentId: string) => {
-		setStudents(students.map((student: StudentProfile) => {
-			return student.id === studentId
-				? { ...student, tags: [...student.tags, tag] }
-				: student;
-		}));
-		setAPIStudents(APIstudents.map((student: StudentProfile) => {
+		setAPIStudents(APIStudents.map((student: StudentProfile) => {
 			return student.id === studentId
 				? { ...student, tags: [...student.tags, tag] }
 				: student;
@@ -50,10 +27,10 @@ const App: FC = () => {
 	 * @param {number} i - The index of the tag to delete.
 	 * @param {string} studentId - The id of the student from which to delete the tag.
 	 */
-	const removeTagFromStudent = (i: number, studentId: string) => {
-		setStudents(students.map((student: StudentProfile) => {
+	const removeTagFromStudent = (tagIndex: number, studentId: string) => {
+		setAPIStudents(APIStudents.map((student: StudentProfile) => {
 			return student.id === studentId
-				? { ...student, tags: student.tags.filter((_tag, index) => index !== i) }
+				? { ...student, tags: student.tags.filter((_tag, index) => index !== tagIndex) }
 				: student;
 		}));
 	}
@@ -64,12 +41,9 @@ const App: FC = () => {
 			.then((response) => {
 				return response.json();
 			})
-			.then((data: ListOfStudents) => {
-				setAPIStudents(data.students.map((student: StudentProfile) => {
-					return {...student, tags: [], fullName: [student.firstName,  student.lastName].join(" ")};
-				}));
-				setStudents(data.students.map((student: StudentProfile) => {
-					return {...student, tags: [], fullName: [student.firstName,  student.lastName].join(" ")};
+			.then((data: Data) => {
+				setAPIStudents(data.students!.map((student: StudentProfile) => {
+					return { ...student, tags: [], fullName: [student.firstName, student.lastName].join(" ") };
 				}));
 			})
 			.catch((error) => {
@@ -81,25 +55,20 @@ const App: FC = () => {
 		<div className="App">
 			<div>
 				<SearchBar
-					APIdata={APIstudents}
-					data={students}
-					setData={setStudents}
 					setFilters={setFilters}
 					filters={filters}
 					searchParam={"fullName"}
 					placeholder="Search by name"
 				/>
 				<SearchBar
-					APIdata={APIstudents}
-					data={students}
-					setData={setStudents}
 					setFilters={setFilters}
 					filters={filters}
 					searchParam={"tags"}
 					placeholder="Search by tag"
 				/>
 				<StudentsList
-					students={students}
+					APIStudents={APIStudents}
+					filters={filters}
 					addTagToStudent={addTagToStudent}
 					removeTagFromStudent={removeTagFromStudent}
 				/>

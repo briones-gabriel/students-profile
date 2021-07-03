@@ -2,19 +2,19 @@ import { FC, useState } from "react";
 import { StudentProfile } from "../global";
 import ProfilePicture from "./ProfilePicture";
 
-/**
- * Returns the average all the items in a given array of numbers.
- *
- * @param {Array<string>} list - The list of numbers.
- * @return {number} The average of the sum of all the elements in the array.
-*/
-const getAverage = (list: Array<string>): number => {
-	return list.reduce((a, b) => Number(a) + Number(b), 0) / list.length;
-}
-
 const Student: FC<StudentProfile> = ({ id, fullName, city, company, email, grades, pic, skill, tags, addTagToStudent, removeTagFromStudent }) => {
 	const [showTests, setShowTests] = useState(false);
 	const [input, setInput] = useState("");
+
+	/**
+	 * Returns the average of all the items in a given array of numbers.
+	 *
+	 * @param {Array<string>} list - The list of numbers.
+	 * @return {number} The average of the sum of all the elements in the array.
+	*/
+	const getAverage = (list: Array<string>): number => {
+		return list.reduce((a, b) => Number(a) + Number(b), 0) / list.length;
+	}
 
 	/**
 	 * Handles what happens when the user presses a key on the tags input field.
@@ -53,7 +53,7 @@ const Student: FC<StudentProfile> = ({ id, fullName, city, company, email, grade
 					{tags && (
 						<ul className="tag-container">
 							{tags.map((tag, i) => (
-								<li key={i} className="tag" onClick={() => removeTagFromStudent(i, id)}>
+								<li key={i} className="tag" onClick={() => removeTagFromStudent(i, id)} title="Click to remove">
 									<p>{tag}</p>
 								</li>
 							))}

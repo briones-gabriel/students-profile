@@ -11,21 +11,28 @@ export interface StudentProfile extends Record<string, string | Array<string> | 
 	skill: string,
 	tags: Array<string>,
 	addTagToStudent: (tag: string, studentId: string) => void,
-	removeTagFromStudent: (i: number, studentId: string) => void,
+	removeTagFromStudent: (tagIndex: number, studentId: string) => void,
 };
 
 export interface ListOfStudents {
-	students: Array<StudentProfile>,
+	APIStudents: Array<StudentProfile>,
+	filters: Map<string, string>,
 	addTagToStudent: (tag: string, studentId: string) => void,
-	removeTagFromStudent: (i: number, studentId: string) => void,
+	removeTagFromStudent: (tagIndex: number, studentId: string) => void,
 }
 
 export interface Searchable {
-	APIdata: Array<StudentProfile>,
-	data: Array<StudentProfile>,
-	setData: (students: Array<StudentProfile>) => any,
-	setFilters: any,
-	filters: any,
+	setFilters: React.Dispatch<React.SetStateAction<Map<string, string>>>,
+	filters: Map<string, string>,
 	searchParam: string,
 	placeholder: string
+}
+
+export interface Picture {
+	url: string,
+	alt: string
+}
+
+export interface Data {
+	students: Array<StudentProfile>,
 }
